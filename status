@@ -1,0 +1,15 @@
+#!/bin/sh
+#Status message
+#call with: xsetroot -name 
+(
+echo "|"
+printf "CPU %4.1f%%" $(LC_ALL=C top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
+echo " RAM `free -m | awk '/Mem:/ {printf("%3.1f%%", $3/$2*100) }' ` "
+echo "|"
+#storage paths
+echo "Home `df -h /home | awk '/\// {print $(NF-1)}'`"
+echo "|"
+date +"%T [%d-%m-%Y] |"
+#battery path
+cat /sys/class/power_supply/BAHY/capacity
+) | tr '\n' ' '
